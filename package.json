@@ -1,18 +1,19 @@
 {
-	"name": "gulp-boilerplate",
-	"version": "0.0.1",
-	"description": "Simple gulp.js boilerplate for new projects",
+	"name": "gulp-project-template",
+	"version": "0.0.2",
+	"description": "Simple gulp.js template for new projects",
 	"author": "Brian Emilius <brian@brianemilius.com>",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/BrianEmilius/gulp-boilerplate"
+		"url": "https://github.com/BrianEmilius/gulp-project-template"
 	},
 	"dependencies": {
 		"gulp": "~3.9.1",
+		"jshint": "~2.9.4",
 		"gulp-jshint": "~2.0.4",
 		"gulp-changed": "~1.3.2",
 		"gulp-imagemin": "~3.1.1",
-		"gulp-minify-html": "~1.0.6",
+		"gulp-htmlmin": "~3.0.0",
 		"gulp-concat": "~2.6.1",
 		"gulp-strip-debug": "~1.1.0",
 		"gulp-uglify": "~2.0.0",

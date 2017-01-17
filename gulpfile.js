@@ -5,7 +5,7 @@ var gulp = require('gulp'),
 	jshint = require('gulp-jshint'),
 	changed = require('gulp-changed'),
 	imagemin = require('gulp-imagemin'),
-	minifyHTML = require('gulp-minify-html'),
+	minifyHTML = require('gulp-htmlmin'),
 	concat = require('gulp-concat'),
 	stripDebug = require('gulp-strip-debug'),
 	uglify = require('gulp-uglify'),
@@ -43,7 +43,7 @@ gulp.task('htmlpage', () => {
 
 	gulp.src(htmlSrc)
 		.pipe(changed(htmlDst))
-		.pipe(minifyHTML())
+		.pipe(minifyHTML({collapseWhitespace: true}))
 		.pipe(gulp.dest(htmlDst));
 });
 
