@@ -7,6 +7,7 @@ var gulp = require('gulp'),
 	imagemin = require('gulp-imagemin'),
 	minifyHTML = require('gulp-htmlmin'),
 	concat = require('gulp-concat'),
+	inject = require('gulp-inject'),
 	stripDebug = require('gulp-strip-debug'),
 	uglify = require('gulp-uglify'),
 	autoprefix = require('gulp-autoprefixer'),
@@ -40,9 +41,26 @@ gulp.task('imagemin', () => {
 gulp.task('htmlpage', () => {
 	var htmlSrc = './src/*.html',
 		htmlDst = './build';
+		//sources = gulp.src(['./build/**/*.js', './build/**/*.css'], {read: false});
 
 	gulp.src(htmlSrc)
 		.pipe(changed(htmlDst))
+		.pipe(inject(gulp.src(['./build/**/*.js'], {read: false}), {
+			addRootSlash: false,
+			transform: (filePath, file, i, length) => {
+				var newPath = filePath.replace('build/', '');
+				console.log('injected script: ' + newPath);
+				return '<script src="' + newPath  + '"></script>';
+			}
+		}))
+		.pipe(inject(gulp.src(['./build/**/*.css'], {read: false}), {
+			addRootSlash: false,
+			transform: (filePath, file, i, length) => {
+				var newPath = filePath.replace('build/', '');
+				console.log('injected style: ' + newPath);
+				return '<link rel="stylesheet" href="' + newPath + '">';
+			}
+		}))
 		.pipe(minifyHTML({collapseWhitespace: true}))
 		.pipe(gulp.dest(htmlDst));
 });
@@ -73,8 +91,21 @@ gulp.task('css', () => {
 		.pipe(gulp.dest('./build/assets/stylesheets'));
 });
 
+// copy relevant boostrap and jquery files to build
+gulp.task('copyBootstrap', () => {
+	gulp.src(
+		['./node_modules/bootstrap/dist/js/bootstrap.min.js',
+		'./node_modules/jquery/dist/jquery.min.js'])
+		.pipe(gulp.dest('./build/assets/scripts'));
+
+	gulp.src(
+		['./node_modules/bootstrap/dist/css/bootstrap.min.css',
+		'./node_modules/bootstrap/dist/css/bootstrap-theme.min.css'])
+		.pipe(gulp.dest('./build/assets/stylesheets'));
+});
+
 // default gulp task
-gulp.task('default', ['imagemin', 'htmlpage', 'jshint', 'scripts', 'sass', 'css'], () => {
+gulp.task('default', ['imagemin', 'jshint', 'scripts', 'sass', 'css', 'copyBootstrap', 'htmlpage'], () => {
 	// watch for image-changes
 	gulp.watch('./src/assets/media/**/*', ['imagemin']);
 	
