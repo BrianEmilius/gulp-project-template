@@ -104,8 +104,17 @@ gulp.task('copyBootstrap', () => {
 		.pipe(gulp.dest('./build/assets/stylesheets'));
 });
 
+// copy relevant font-awesome files to build
+gulp.task('copyFontAwesome', () => {
+	gulp.src(['./node_modules/font-awesome/css/font-awesome.min.css'])
+		.pipe(gulp.dest('./build/assets/stylesheets'));
+
+	gulp.src(['./node_modules/font-awesome/fonts/*'])
+		.pipe(gulp.dest('./build/assets/fonts'));
+});
+
 // default gulp task
-gulp.task('default', ['imagemin', 'jshint', 'scripts', 'sass', 'css', 'copyBootstrap', 'htmlpage'], () => {
+gulp.task('default', ['imagemin', 'jshint', 'scripts', 'copyFontAwesome', 'sass', 'css', 'copyBootstrap', 'htmlpage'], () => {
 	// watch for image-changes
 	gulp.watch('./src/assets/media/**/*', ['imagemin']);
 	
