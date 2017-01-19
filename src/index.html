@@ -13,9 +13,41 @@
 
 </head>
 <body>
-	<header>
-		<h1>Hello World!</h1>
-		<p>This is some text. Neat, innit?</p>
+	<header class="page-header">
+		<div class="container-fluid">
+			<h1>Hello World! <small>It's a beautiful day</small></h1>
+		</div>
 	</header>
+	<div class="container-fluid">
+		<nav class="navbar navbar-default">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#primaryNav" aria-expanded="false">
+					<i class="fa fa-bars"></i><span class="sr-only">Toggle menu</span>
+				</button>
+				<div class="collapse navbar-collapse" id="primaryNav">
+					<ul class="nav navbar-nav">
+						<li><a href="#">Link 1</a></li>
+						<li><a href="#">Link 2</a></li>
+						<li><a href="#">Link 3</a></li>
+						<li><a href="#">Link 4</a></li>
+					</ul>
+					<form class="navbar-form navbar-right" role="application">
+						<div class="form-group">
+							<div class="input-group">
+								<span class="input-group-addon" id="username"><i class="fa fa-user"></i><span class="sr-only">Username</span></span>
+								<input type="text" class="form-control" placeholder="Username" aria-describedby="username">
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="input-group">
+								<span class="input-group-addon" id="password"><i class="fa fa-lock"></i><span class="sr-only">Password</span></span>
+								<input type="password" class="form-control" placeholder="Password" aria-describedby="password">
+							</div>
+						</div>
+						<button class="btn btn-success"><i class="fa fa-sign-in"></i> Sign in</button>
+						<p><small><a href="#">I forgot my password</a> | <a href="#">Sign up</a></small></p>
+					</form>
+				</div>
+		</nav>
+	</div>
 </body>
 </html>
