@@ -15,6 +15,7 @@ var gulp = require('gulp'),
 	sass = require('gulp-sass'),
 	cached = require('gulp-cached'),
 	sassPartialsImported = require('gulp-sass-partials-imported'),
+	series = require('stream-series'),
 
 // other variables
 	scss_dir = './src/assets/stylesheets/sass/';
@@ -37,15 +38,16 @@ gulp.task('imagemin', () => {
 		.pipe(gulp.dest(imgDst));
 });
 
-// minify new or changed HTML pages
+// inject relevant stylesheets and scripts, minify new or changed HTML pages
 gulp.task('htmlpage', () => {
 	var htmlSrc = './src/*.html',
-		htmlDst = './build';
-		//sources = gulp.src(['./build/**/*.js', './build/**/*.css'], {read: false});
+		htmlDst = './build',
+		scripts = gulp.src(['./build/assets/scripts/jquery.min.js', './build/assets/scripts/bootstrap.min.js', './build/assets/scripts/app.js'], {read: false}),
+		css = gulp.src(['./build/assets/stylesheets/bootstrap.min.css', './build/assets/stylesheets/bootstrap-theme.min.css', './build/assets/stylesheets/font-awesome.min.css', './build/assets/stylesheets/default.css'], {read: false});
 
 	gulp.src(htmlSrc)
 		.pipe(changed(htmlDst))
-		.pipe(inject(gulp.src(['./build/**/*.js'], {read: false}), {
+		.pipe(inject(scripts, {
 			addRootSlash: false,
 			transform: (filePath, file, i, length) => {
 				var newPath = filePath.replace('build/', '');
@@ -53,7 +55,7 @@ gulp.task('htmlpage', () => {
 				return '<script src="' + newPath  + '"></script>';
 			}
 		}))
-		.pipe(inject(gulp.src(['./build/**/*.css'], {read: false}), {
+		.pipe(inject(css, {
 			addRootSlash: false,
 			transform: (filePath, file, i, length) => {
 				var newPath = filePath.replace('build/', '');
@@ -68,7 +70,7 @@ gulp.task('htmlpage', () => {
 // JS concat, strip debugging and minify
 gulp.task('scripts', () => {
 	gulp.src(['./src/assets/scripts/lib.js','./src/assets/scripts/*.js'])
-		.pipe(concat('script.js'))
+		.pipe(concat('app.js'))
 		.pipe(stripDebug())
 		.pipe(uglify())
 		.pipe(gulp.dest('./build/assets/scripts/'));
@@ -79,15 +81,7 @@ gulp.task('sass', () => {
 	gulp.src(['./src/assets/stylesheets/sass/**/*.scss'])
 		.pipe(cached('sassfiles'))
 		.pipe(sassPartialsImported(scss_dir))
-		.pipe(sass({includePaths: scss_dir}).on('error', sass.logError))
-		.pipe(gulp.dest('./src/assets/stylesheets'));
-});
-
-// CSS concat, auto-prefix and minify
-gulp.task('css', () => {
-	gulp.src(['./src/assets/stylesheets/*.css'])
-		.pipe(autoprefix('last 18 versions'))
-		.pipe(cleanCSS({compatibility: 'ie8'}))
+		.pipe(sass({includePaths: scss_dir, outputStyle: 'compressed'}).on('error', sass.logError))
 		.pipe(gulp.dest('./build/assets/stylesheets'));
 });
 
@@ -114,7 +108,7 @@ gulp.task('copyFontAwesome', () => {
 });
 
 // default gulp task
-gulp.task('default', ['imagemin', 'jshint', 'scripts', 'copyFontAwesome', 'sass', 'css', 'copyBootstrap', 'htmlpage'], () => {
+gulp.task('default', ['imagemin', 'jshint', 'scripts', 'copyFontAwesome', 'sass', 'copyBootstrap', 'htmlpage'], () => {
 	// watch for image-changes
 	gulp.watch('./src/assets/media/**/*', ['imagemin']);
 	
@@ -126,7 +120,4 @@ gulp.task('default', ['imagemin', 'jshint', 'scripts', 'copyFontAwesome', 'sass'
 
 	// watch for SASS changes
 	gulp.watch('./src/assets/stylesheets/sass/*.scss', ['sass']);
-
-	// watch for CSS changes
-	gulp.watch('./src/assets/stylesheets/*.css', ['css']);
 });
