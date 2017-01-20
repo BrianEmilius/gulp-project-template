@@ -97,7 +97,7 @@ gulp.task('copyMaterialize', () => {
 		.pipe(gulp.dest('./build/assets/stylesheets'));
 
 	gulp.src(
-		['./node_modules/materialize-css/dist/fonts/*'])
+		['./node_modules/materialize-css/dist/fonts/**/*'])
 		.pipe(gulp.dest('./build/assets/fonts'));
 });
 
