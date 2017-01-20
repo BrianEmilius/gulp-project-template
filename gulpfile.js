@@ -42,8 +42,8 @@ gulp.task('imagemin', () => {
 gulp.task('htmlpage', () => {
 	var htmlSrc = './src/*.html',
 		htmlDst = './build',
-		scripts = gulp.src(['./build/assets/scripts/jquery.min.js', './build/assets/scripts/bootstrap.min.js', './build/assets/scripts/app.js'], {read: false}),
-		css = gulp.src(['./build/assets/stylesheets/bootstrap.min.css', './build/assets/stylesheets/bootstrap-theme.min.css', './build/assets/stylesheets/font-awesome.min.css', './build/assets/stylesheets/default.css'], {read: false});
+		scripts = gulp.src(['./build/assets/scripts/jquery.min.js', './build/assets/scripts/materialize.min.js', './build/assets/scripts/app.js'], {read: false}),
+		css = gulp.src(['./build/assets/stylesheets/materialize.min.css', './build/assets/stylesheets/font-awesome.min.css', './build/assets/stylesheets/default.css'], {read: false});
 
 	gulp.src(htmlSrc)
 		.pipe(changed(htmlDst))
@@ -85,17 +85,20 @@ gulp.task('sass', () => {
 		.pipe(gulp.dest('./build/assets/stylesheets'));
 });
 
-// copy relevant boostrap and jquery files to build
-gulp.task('copyBootstrap', () => {
+// copy relevant materialize and jquery files to build
+gulp.task('copyMaterialize', () => {
 	gulp.src(
-		['./node_modules/bootstrap/dist/js/bootstrap.min.js',
+		['./node_modules/materialize-css/dist/js/materialize.min.js',
 		'./node_modules/jquery/dist/jquery.min.js'])
 		.pipe(gulp.dest('./build/assets/scripts'));
 
 	gulp.src(
-		['./node_modules/bootstrap/dist/css/bootstrap.min.css',
-		'./node_modules/bootstrap/dist/css/bootstrap-theme.min.css'])
+		['./node_modules/materialize-css/dist/css/materialize.min.css'])
 		.pipe(gulp.dest('./build/assets/stylesheets'));
+
+	gulp.src(
+		['./node_modules/materialize-css/dist/fonts/*'])
+		.pipe(gulp.dest('./build/assets/fonts'));
 });
 
 // copy relevant font-awesome files to build
@@ -108,7 +111,7 @@ gulp.task('copyFontAwesome', () => {
 });
 
 // default gulp task
-gulp.task('default', ['imagemin', 'jshint', 'scripts', 'copyFontAwesome', 'sass', 'copyBootstrap', 'htmlpage'], () => {
+gulp.task('default', ['imagemin', 'jshint', 'scripts', 'copyFontAwesome', 'sass', 'copyMaterialize', 'htmlpage'], () => {
 	// watch for image-changes
 	gulp.watch('./src/assets/media/**/*', ['imagemin']);
 	
