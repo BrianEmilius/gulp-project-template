@@ -8,7 +8,7 @@
     "url": "https://github.com/BrianEmilius/gulp-project-template"
   },
   "dependencies": {
-    "bootstrap": "~3.3.7",
+    "bootstrap": "~4.1.2",
     "font-awesome": "~4.7.0",
     "gulp": "~3.9.1",
     "gulp-autoprefixer": "~3.1.1",
